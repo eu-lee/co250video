@@ -1,3 +1,5 @@
+./solver/solver.py
+
 .venv/
 media/
 video/renders/
