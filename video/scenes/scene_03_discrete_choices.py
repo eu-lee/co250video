@@ -16,7 +16,7 @@ class Scene03DiscreteChoices(BaseSugarcaneScene):
         cell.set_stroke(opacity=0)
         cell.next_to(title, DOWN, buff=1.25)
 
-        label = Text("Integer Program", font_size=42, color=TEXT, weight=BOLD)
+        label = Text("Integer Program", font_size=BOLD_FONT_SIZE, color=TEXT, weight=BOLD)
         label.next_to(cell, DOWN, buff=0.75)
 
         self.play(Write(title))

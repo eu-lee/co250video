@@ -87,10 +87,21 @@ class Scene09DistanceNeighbors(BaseSugarcaneScene):
             aligned_edge=LEFT,
         )
 
-        expression_stack = VGroup(
-            MathTex(r"(p,q)", font_size=34, color=TEXT),
-            MathTex(r"|p-i|+|q-j|", font_size=34, color=TEXT),
-        ).arrange(DOWN, buff=0.42, aligned_edge=LEFT)
+        point_domain = MathTex(
+            r"(p,q)\in\{1,\ldots,n\}^2",
+            font_size=34,
+            color=TEXT,
+        )
+        manhattan_distance = MathTex(
+            r"|p-i|+|q-j|",
+            font_size=34,
+            color=TEXT,
+        )
+        expression_stack = VGroup(point_domain, manhattan_distance).arrange(
+            DOWN,
+            buff=0.42,
+            aligned_edge=LEFT,
+        )
         expression_stack.move_to(formula_stack)
 
         row = 4
@@ -138,9 +149,12 @@ class Scene09DistanceNeighbors(BaseSugarcaneScene):
         self.play(
             selected.animate.set_fill(SUGARCANE, opacity=0.95),
             Write(selected_label),
-            Write(expression_stack),
+            Write(point_domain),
             run_time=0.9,
         )
+        self.wait(0.45)
+        self.play(Write(manhattan_distance), run_time=0.8)
+        self.wait(0.35)
         self.play(FadeOut(selected_label), run_time=0.35)
         self.play(FadeIn(distance_labels), run_time=1.0)
         self.wait(0.35)

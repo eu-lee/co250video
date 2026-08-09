@@ -27,8 +27,11 @@ class Scene06ObjectiveFunction(BaseSugarcaneScene):
             color=TEXT,
         )
 
-        layout = VGroup(grid, objective).arrange(RIGHT, buff=1.0)
-        layout.move_to(ORIGIN)
+        scene_05_spacer = Rectangle(width=6.4, height=grid.height)
+        scene_05_spacer.set_stroke(opacity=0)
+        scene_05_spacer.set_fill(opacity=0)
+        VGroup(grid, scene_05_spacer).arrange(RIGHT, buff=0.85).move_to(ORIGIN)
+        objective.next_to(grid, RIGHT, buff=1.0)
 
         numbers = VGroup()
         for row, col in cane_cells:
@@ -36,12 +39,15 @@ class Scene06ObjectiveFunction(BaseSugarcaneScene):
         for row, col in water_cells:
             numbers.add(Text("0", font_size=14, color="#07131f").move_to(self.cell(grid, row, col)))
 
-        self.play(FadeIn(grid))
+        self.add(grid)
+        self.wait(0.45)
         self.play(
             cane_group.animate.set_fill(SUGARCANE, opacity=0.95),
             water_group.animate.set_fill(WATER, opacity=0.95),
             run_time=1.1,
         )
+        self.wait(0.65)
         self.play(FadeIn(numbers), run_time=0.7)
+        self.wait(0.65)
         self.play(Write(objective))
         self.wait(1.2)

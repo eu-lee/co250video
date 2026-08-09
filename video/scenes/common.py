@@ -10,7 +10,9 @@ MUTED = "#b9c0c7"
 ACCENT = "#ffd166"
 BAD = "#ff6b6b"
 
-NARRATION_FONT_SIZE = 34
+REGULAR_FONT_SIZE = 30
+BOLD_FONT_SIZE = 30
+NARRATION_FONT_SIZE = REGULAR_FONT_SIZE
 TOP_NARRATION_BUFF = 0.75
 NARRATION_LINE_BUFF = 0.26
 VISUAL_AFTER_TEXT_BUFF = 0.36
@@ -37,17 +39,17 @@ class BaseSugarcaneScene(Scene):
         ).arrange(DOWN, buff=buff, aligned_edge=LEFT)
 
     def title(self, text):
-        title = Text(text, font_size=40, color=TEXT, weight=BOLD)
+        title = Text(text, font_size=BOLD_FONT_SIZE, color=TEXT, weight=BOLD)
         title.to_edge(UP, buff=0.35)
         return title
 
-    def caption(self, text, width=11.5, font_size=24):
+    def caption(self, text, width=11.5, font_size=REGULAR_FONT_SIZE):
         caption = Text(text, font_size=font_size, color=MUTED, line_spacing=0.85)
         caption.scale_to_fit_width(width)
         caption.to_edge(DOWN, buff=0.35)
         return caption
 
-    def formula(self, text, font_size=30, color=TEXT):
+    def formula(self, text, font_size=REGULAR_FONT_SIZE, color=TEXT):
         return Text(text, font_size=font_size, color=color)
 
     def grid(self, n=5, side=0.62, fill=SAND):
@@ -81,7 +83,7 @@ class BaseSugarcaneScene(Scene):
             fill_color="#1b2128",
             fill_opacity=0.95,
         )
-        text = Text(label, font_size=24, color=TEXT)
+        text = Text(label, font_size=REGULAR_FONT_SIZE, color=TEXT)
         text.scale_to_fit_width(width - 0.3)
         return VGroup(box, text)
 

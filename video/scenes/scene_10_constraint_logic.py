@@ -7,15 +7,55 @@ class Scene10ConstraintLogic(BaseSugarcaneScene):
         grid = self.grid(10, side=0.38)
         grid.set_fill(opacity=0)
 
+        scene_09_neighbor_formula = MathTex(
+            r"N(i,j) = \{",
+            r"(i-1,j),",
+            r"(i+1,j),",
+            r"(i,j-1),",
+            r"(i,j+1)",
+            r"\}",
+            font_size=34,
+            color=TEXT,
+        )
+        scene_09_neighbor_formula.scale_to_fit_width(5.7)
+        scene_09_boundary_formula = MathTex(
+            r"N(1,1) = \{",
+            r"(0,1),",
+            r"(2,1),",
+            r"(1,0),",
+            r"(1,2)",
+            r"\}",
+            font_size=34,
+            color=TEXT,
+        )
+        scene_09_boundary_formula.scale(
+            scene_09_neighbor_formula.height / scene_09_boundary_formula.height
+        )
+        scene_09_formula_anchor = VGroup(
+            scene_09_neighbor_formula,
+            scene_09_boundary_formula,
+        ).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
+        VGroup(grid, scene_09_formula_anchor).arrange(RIGHT, buff=0.85).move_to(ORIGIN)
+
         neighbor_definition = MathTex(
             r"N(i,j) := \{(p,q)\in\{1,\ldots,n\}^2 : |p-i|+|q-j|=1\}",
             font_size=34,
             color=TEXT,
         )
         neighbor_definition.scale_to_fit_width(7.0)
+        neighbor_definition.move_to(scene_09_formula_anchor).shift(UP * 0.18)
 
         constraint = MathTex(
             r"\sum_{(p,q)\in N(i,j)} (1-x_{p,q}) \ge x_{i,j}",
+            font_size=34,
+            color=TEXT,
+        )
+        water_indicator = MathTex(
+            r"1-x_{p,q}="
+            r"\begin{cases}"
+            r"1, & \text{if neighbour has water}\\"
+            r"0, & \text{if neighbour has sugarcane}"
+            r"\end{cases}",
             font_size=34,
             color=TEXT,
         )
@@ -35,15 +75,34 @@ class Scene10ConstraintLogic(BaseSugarcaneScene):
             color=BAD,
         )
 
-        formula_stack = VGroup(neighbor_definition, constraint).arrange(
+        filtered_corner_formula = MathTex(
+            r"N(1,1) = \{(2,1),(1,2)\}",
+            font_size=34,
+            color=TEXT,
+        )
+        filtered_corner_formula.scale(
+            neighbor_definition.height / filtered_corner_formula.height
+        )
+        filtered_corner_formula.next_to(
+            neighbor_definition,
             DOWN,
             buff=0.36,
             aligned_edge=LEFT,
         )
-        layout = VGroup(grid, formula_stack).arrange(RIGHT, buff=0.8)
-        layout.move_to(ORIGIN)
-        formula_stack.shift(UP * 0.35)
 
+        neighbor_definition_target = neighbor_definition.copy().shift(UP * 0.95)
+        constraint.next_to(
+            neighbor_definition_target,
+            DOWN,
+            buff=0.36,
+            aligned_edge=LEFT,
+        )
+        water_indicator.next_to(
+            neighbor_definition_target,
+            DOWN,
+            buff=0.36,
+            aligned_edge=LEFT,
+        )
         valid_sum.next_to(constraint, DOWN, buff=0.48, aligned_edge=LEFT)
         invalid_sum.move_to(valid_sum)
         invalid_result.next_to(invalid_sum, DOWN, buff=0.3, aligned_edge=LEFT)
@@ -123,8 +182,38 @@ class Scene10ConstraintLogic(BaseSugarcaneScene):
         )
         invalid_parts.move_to(invalid_sum)
 
-        self.add(neighbor_definition)
-        self.play(FadeIn(grid))
+        corner = self.cell(grid, 0, 0)
+        corner.set_fill(SUGARCANE, opacity=0.95)
+        scene_09_valid_neighbors = VGroup(
+            self.cell(grid, 1, 0),
+            self.cell(grid, 0, 1),
+        )
+        scene_09_valid_neighbors.set_fill(WATER, opacity=0.95)
+        corner_label = MathTex(r"x_{1,1}", font_size=22, color=TEXT)
+        corner_label.next_to(corner, DR, buff=0.08)
+        corner_label.set_z_index(4)
+
+        self.add(
+            grid,
+            neighbor_definition,
+            filtered_corner_formula,
+            corner_label,
+        )
+        self.wait(0.65)
+        self.play(
+            FadeOut(filtered_corner_formula),
+            FadeOut(corner_label),
+            corner.animate.set_fill(opacity=0),
+            scene_09_valid_neighbors.animate.set_fill(opacity=0),
+            run_time=0.75,
+        )
+        self.wait(0.25)
+        self.play(Transform(neighbor_definition, neighbor_definition_target), run_time=0.75)
+        self.wait(0.3)
+        self.play(Write(water_indicator), run_time=1.0)
+        self.wait(0.8)
+        self.play(FadeOut(water_indicator), run_time=0.45)
+        self.wait(0.25)
         self.play(Write(constraint), run_time=0.8)
         self.play(
             center.animate.set_fill(SUGARCANE, opacity=0.95),

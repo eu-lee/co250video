@@ -4,17 +4,25 @@ from common import *
 
 class Scene01FormalizeQuestion(BaseSugarcaneScene):
     def construct(self):
-        first_clause = self.narration_tex(
+        scene_text_size = 42
+        first_clause = Tex(
             r"Given an $n \times n$ plot,",
+            font_size=scene_text_size,
+            color=TEXT,
         )
-        first_line_rest = self.narration_tex(
+
+        first_line_rest = Tex(
             r"how can we place sugarcane",
+            font_size=scene_text_size,
+            color=TEXT,
         )
         first_line = VGroup(first_clause, first_line_rest).arrange(RIGHT, buff=0.12, aligned_edge=DOWN)
         self.place_as_top_narration(first_line)
 
-        second_line = self.narration_tex(
+        second_line = Tex(
             r"to maximize the amount produced?",
+            font_size=scene_text_size,
+            color=TEXT,
         )
         second_line.next_to(first_line, DOWN, buff=NARRATION_LINE_BUFF)
 

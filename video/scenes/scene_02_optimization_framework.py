@@ -14,6 +14,8 @@ class Scene02OptimizationFramework(BaseSugarcaneScene):
         items.move_to(ORIGIN + DOWN * 0.05)
 
         self.play(Write(title))
+        self.wait(4.0)
         for item in items:
             self.play(Write(item), run_time=0.5)
+            self.wait(2.0)
         self.wait(1.2)
