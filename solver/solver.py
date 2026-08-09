@@ -12,13 +12,13 @@ class sugarcaneSolver:
 
         self.x = {}
 
-        for i in range(n):
-            for j in range(n):
+    def set_variables(self):
+
+        for i in range(self.n):
+            for j in range(self.n):
                 self.x[(i,j)] = self.model.new_bool_var(f"x_{i}_{j}")
 
-        
-
-    def objective(self):
+    def f(self):
         f = 0
 
         for i in range(self.n):
@@ -27,6 +27,8 @@ class sugarcaneSolver:
 
         return f
 
+    def set_objective(self, objective):
+        self.model.maximize(objective())
         
     def N(self, i:int, j:int):
         positions = []
@@ -38,8 +40,8 @@ class sugarcaneSolver:
                     positions.append((p,q))
 
         return positions
-
-    def constraint(self):
+    
+    def set_constraint(self):
 
         for i in range(self.n):
             for j in range(self.n):
@@ -94,10 +96,11 @@ class sugarcaneSolver:
 
         plt.show()
 
-o = sugarcaneSolver(5)
+o = sugarcaneSolver(10)
 
-o.model.maximize(o.objective())
-o.constraint()
+o.set_variables()
+o.set_constraint()
+o.set_objective(o.f)
 
 print(o.solve())
 
